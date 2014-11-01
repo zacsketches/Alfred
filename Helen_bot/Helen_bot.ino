@@ -22,8 +22,8 @@ const int rt_dir_pin = 2;
 const int rt_pwm_pin = 3;
 const int lt_dir_pin = 4;
 const int lt_pwm_pin = 5;
-const int rt_bumper_pin = 13;
-const int lt_bumper_pin = 11;
+const int rt_bumper_pin = 12;
+const int lt_bumper_pin = 13;
 
 /*------------Required to initiate the Glow Worm Framework---------------*/
 gw::Clearinghouse ch;

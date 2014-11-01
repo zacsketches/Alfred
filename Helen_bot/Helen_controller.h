@@ -18,7 +18,7 @@
 //gw components
 
 namespace Manuever_state {
-	enum ms {clear, manuevering};
+	enum ms {clear, maneuvering};
 }
 
 //*******************************************************************
@@ -30,11 +30,15 @@ extern Cmd_velocity_msg cmd_velocity_msg;
 extern Clearinghouse ch;
 
 class Helen_controller : public gw::Node {
+private:
 	//----------CLASS DATA-----------------
 	//Manuever state is either clear or manuevering
 	Manuever_state::ms man_state;
   	//Maneuver time is the amount of time the bot reacts to a bump
 	int mt;
+	Time maneuver_start;
+	Time maneuver_finish;
+	const Cmd_velocity_msg* current_maneuver;
 
 	//---------BOILER PLATE----------------
   	//Publisher/Subscribers and local copies
@@ -60,26 +64,43 @@ public:
 	void begin() {}
     
 	void run() {
+		Time now = millis();
 		//update the control effort
 		sub.update();
 		
-		//pointer test
-//		const Cmd_velocity_msg* test = &Control::forward_easy;
-//		test->print();
-//		
-		//default easy forward
-		local_v_msg.update(&Control::forward_easy);
+		//if clear then find the right vector, but if
+		//maneuvering then continue until the maneuver
+		//is complete.
 		
-		//if right bumped then back_twist_CCW
-		if(local_bumper_msg.pressed_rt==Bump_state::pressed) {
-			local_v_msg.update(&Control::backtwist_CCW);
+		if(man_state  == Manuever_state::clear) {
+			//default easy forward
+			current_maneuver = &Control::forward_easy;
+			local_v_msg.update(current_maneuver);
+
+			//if right bumped then back_twist_CCW
+			if(local_bumper_msg.pressed_rt==Bump_state::pressed) {
+				man_state = Manuever_state::maneuvering;
+				maneuver_finish = now + mt;
+				current_maneuver = &Control::backtwist_CCW;
+				local_v_msg.update(current_maneuver);
+			}
+			
+			//if left bumped then back_twist_CW
+			if(local_bumper_msg.pressed_lt==Bump_state::pressed) {
+				man_state = Manuever_state::maneuvering;
+				maneuver_finish = now + mt;
+				current_maneuver = &Control::backtwist_CW;
+				local_v_msg.update(current_maneuver);
+			}
+		} else {
+			if(now > maneuver_finish) {
+				man_state = Manuever_state::clear;
+				local_v_msg.update(&Control::forward_easy);
+			} else {
+				local_v_msg.update(current_maneuver);
+			}
 		}
-		
-		//if left bumped then back_twist_CW
-		if(local_bumper_msg.pressed_lt==Bump_state::pressed) {
-			local_v_msg.update(&Control::backtwist_CW);
-		}
-		
+			
 		pub.publish();
 	}
 	

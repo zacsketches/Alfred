@@ -12,12 +12,12 @@
 namespace Control {
     /*------Motor Control Constants-----------------*/
     //                                                  
-															//left mtr                      //right mtr
+						        //left mtr                      //right mtr
     const Cmd_velocity_msg forward_easy("forward_easy", Direction::fwd,   70,           Direction::fwd,   70);
-    const Cmd_velocity_msg backtwist_CCW("back_CCW",     Direction::bck,   70,           Direction::bck,   20);
-    const Cmd_velocity_msg backtwist_CW("back_CW",      Direction::fwd,   20,           Direction::bck,   70);
+    const Cmd_velocity_msg backtwist_CCW("back_CCW",    Direction::bck,   115,          Direction::bck,   10);
+    const Cmd_velocity_msg backtwist_CW("back_CW",      Direction::bck,   10,           Direction::bck,   90);
 
-    const int number_of_controls = 9;
+    const int number_of_controls = 3;
 } //namespace control
 
 #endif
