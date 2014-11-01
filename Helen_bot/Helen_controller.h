@@ -27,6 +27,7 @@ namespace Manuever_state {
 
 extern Two_bumper_msg bumper_msg;
 extern Cmd_velocity_msg cmd_velocity_msg;
+extern Cmd_led_msg cmd_led_msg;
 extern Clearinghouse ch;
 
 class Helen_controller : public gw::Node {
@@ -47,12 +48,17 @@ private:
 	
 	gw::Publisher<Cmd_velocity_msg> pub;
 	Cmd_velocity_msg local_v_msg;
+	
+	gw::Publisher<Cmd_led_msg> pub2;
+	Cmd_led_msg local_led_msg;
+	
         
 public:
 	Helen_controller()
 		:Node("helen_cont"),
 		sub(&bumper_msg, &ch, local_bumper_msg),
 		pub(&cmd_velocity_msg, &ch, local_v_msg),
+		pub2(&cmd_led_msg, &ch, local_led_msg),
 		mt(2000),	//milliseconds
 		man_state(Manuever_state::clear)
 	{}
@@ -68,6 +74,7 @@ public:
 		//update the control effort
 		sub.update();
 		
+		/*---------------Find control vector--------------------*/
 		//if clear then find the right vector, but if
 		//maneuvering then continue until the maneuver
 		//is complete.
@@ -100,8 +107,33 @@ public:
 				local_v_msg.update(current_maneuver);
 			}
 		}
-			
+
+		/*---------------Write LED commands to local---------------*/
+		if(man_state == Manuever_state::maneuvering) {
+			if(current_maneuver == &Control::backtwist_CCW) { //bumped on the right
+				local_led_msg.far_lt  = Led_state::off;
+				local_led_msg.near_lt = Led_state::off;
+				local_led_msg.mid     = Led_state::on;
+				local_led_msg.near_rt = Led_state::on;
+				local_led_msg.far_rt  = Led_state::on;
+			}
+			if(current_maneuver == &Control::backtwist_CW) { //bumped on the left
+				local_led_msg.far_lt  = Led_state::on;
+				local_led_msg.near_lt = Led_state::on;
+				local_led_msg.mid     = Led_state::on;
+				local_led_msg.near_rt = Led_state::off;
+				local_led_msg.far_rt  = Led_state::off;
+			}
+		} else {
+				local_led_msg.far_lt  = Led_state::off;
+				local_led_msg.near_lt = Led_state::off;
+				local_led_msg.mid     = Led_state::off;
+				local_led_msg.near_rt = Led_state::off;
+				local_led_msg.far_rt  = Led_state::off;
+		}
+		
 		pub.publish();
+		pub2.publish();
 	}
 	
 	//maneuver time
@@ -123,3 +155,4 @@ public:
 	#endif
 };
 #endif
+
