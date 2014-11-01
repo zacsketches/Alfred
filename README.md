@@ -24,3 +24,10 @@ bumper is wired with two mementary pushbutton switches which grounds
 the input pin and allows the robot to react to the bump.  Reaction 
 time can be set by calling `.set_maneuver_time(int)` on the 
 helen_controller instance before calling the `.begin()` function.
+
+- whisker - This version wanders too, but uses an ultrasonic 
+sensor to attempt obstacle avoidance.  The sensor is good at detecting
+walls and other obstacles, but has trouble with skinny chair legs
+or other thin obstacles.  The header file `scanner.h` contains the
+`Scanner_5pt` class which hides the processing necessary to 
+control the sonar sensor and the servo it is mounted to. 
