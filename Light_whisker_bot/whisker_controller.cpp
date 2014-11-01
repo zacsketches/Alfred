@@ -255,7 +255,7 @@ void Whisker_controller::publish_led_message() {
 	local_led_msg.far_lt  = (sensor_state & 0x10) ? Led_state::on : Led_state::off;
 	local_led_msg.near_lt = (sensor_state & 0x08) ? Led_state::on : Led_state::off;
 	local_led_msg.mid     = (sensor_state & 0x04) ? Led_state::on : Led_state::off;
-	local_led_msg.near_lt = (sensor_state & 0x02) ? Led_state::on : Led_state::off;
+	local_led_msg.near_rt = (sensor_state & 0x02) ? Led_state::on : Led_state::off;
 	local_led_msg.far_rt  = (sensor_state & 0x01) ? Led_state::on : Led_state::off;
 
 	pub2.publish();
