@@ -51,7 +51,7 @@ Five_pt_scan_msg five_pt_scan_msg;
 Cmd_velocity_msg cmd_velocity_msg;
 
 /*------------Construct the system components----------------------------*/
-Scanner_5pt scanner(servo_pin, ping_pin, servo_ctr, span_width, servo_angular_rate, true);
+Scanner_5pt scanner(servo_pin, ping_pin, servo_ctr, span_width);
 gw::Motor* mtr_lt = new gw::Motor("lt", lt_motor_dir, lt_motor_spd);  
 gw::Motor* mtr_rt = new gw::Motor("rt", rt_motor_dir, rt_motor_spd);
 Rover_plant plant(2);
@@ -67,16 +67,15 @@ void setup() {
   scanner.begin();
   scanner.print();
   
+  //attach motors to the Rover_plant
+  plant.attach(mtr_lt);
+  plant.attach(mtr_rt);
+  plant.print();
   
   controller.begin();
   controller.print();
 //  controller.show_trips();
 //  controller.show_scan_data();
-  
-  //attach motors to the Rover_plant
-  plant.attach(mtr_lt);
-  plant.attach(mtr_rt);
-  plant.print();
 
   delay(3000);
 }
@@ -96,7 +95,7 @@ void loop() {
   plant.run();
 
 /*------Inspect global messages-----*/  
-//  cmd_velocity_msg.print();
+  cmd_velocity_msg.print();
 //  five_pt_scan_msg.print();
    
 }

@@ -1,7 +1,5 @@
-#ifndef WB_CONTROLLER_H
-#define WB_CONTROLLER_H SEP_2014
-
-#include "control_vectors.h"
+#ifndef WHISKER_CONTROLLER_H
+#define WHISKER_CONTROLLER_H NOV_2014
 
 #include <arduino.h>
 
@@ -12,18 +10,19 @@
 #include <Vector.h>
 #include <Pair.h>
 
-//gw Nodes
-#include <Scanner_5pt.h>
-#include <Rover_plant.h>
-#include <Simple_bumper.h>
+//gw blocks
+#include <blocks/scanner.h>
+#include <blocks/rover_plant.h>
 
 //gw messages
 #include <messages/cmd_velocity.h>
 #include <messages/five_pt_scan.h>
-#include <messages/bumper.h>
+
+//local components
+#include "control_vec.h"
 
 //debug control
-#define INCLUDE_CONTROLLER_PRINT  0
+#define INCLUDE_CONTROLLER_PRINT  1
 #define INCLUDE_DEBUG_SCAN        1
 #define INCLUDE_DEBUG_OTHER       0
 
@@ -42,11 +41,9 @@
 
 extern gw::Clearinghouse ch;
 extern Five_pt_scan_msg five_pt_scan_msg;
-extern Bumper_msg lt_bumper_msg;
-extern Bumper_msg rt_bumper_msg;
 extern Cmd_velocity_msg cmd_velocity_msg;
 
-class WB_controller : public gw::Node {
+class Whisker_controller : public gw::Node {
 private:
 
     //When any of the three middle sensors are inside the 'danger close' 
@@ -59,7 +56,7 @@ private:
     //Keep track of whether the robot is free to manuever or is reacting
     //to a bump.
     //Maneuver time is the amount of time the bot reacts to a bump
-    Bump_state::bs b_state;
+    Bump_state::bump_state b_state;
     const static int mt = 2000; //ms
     
     //Pointer to one of the base control vectors in control_vec.h
@@ -83,12 +80,6 @@ private:
 	gw::Publisher<Cmd_velocity_msg> pub;
 	Cmd_velocity_msg local_msg;  
 	
-    gw::Subscriber<Bumper_msg> lt_bump_sub;
-    Bumper_msg lt_local_bumper_msg;
-
-    gw::Subscriber<Bumper_msg> rt_bump_sub;
-    Bumper_msg rt_local_bumper_msg;    
-
     gw::Subscriber<Five_pt_scan_msg> scan_sub;
     Five_pt_scan_msg local_scan_msg;
     Vector<Scan_pt> scan_data;      //a vector copy of the data in the local_scan_msg
@@ -113,7 +104,7 @@ private:
     byte sensor_state;
  
     // HELPER FUNCTIONS UNIQUE TO THIS CONTROLLER
-    Bump_state::bs calc_b_state();
+    Bump_state::bump_state calc_b_state();
     Danger_close_state::dc calc_dc_state();
     byte calc_sensor_state();
     void update_scan_vector(Vector<Scan_pt>& vec, Five_pt_scan_msg& msg);
@@ -130,7 +121,7 @@ private:
     */
     
 public:
-    WB_controller();
+    Whisker_controller();
 
     const int bump_maneuver_time() const { return mt; }
     const int dc_distance() const { return dc_dist; }
