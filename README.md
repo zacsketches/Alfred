@@ -14,6 +14,7 @@ helen keller controller.
  - v1.1 - Stil manuevering with just the bump sensors, but this 
 version adds the light plant for a visual indication of what was 
 bumped.
+ - v2.0 - Wandering with the five pt scanner.
 
 ##Branches:
 
