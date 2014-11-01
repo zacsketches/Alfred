@@ -1,35 +1,24 @@
-#include <Direction.h>
-
 #ifndef CONTROL_VEC_H
-#define CONTROL_VEC_H JUN_2014
+#define CONTROL_VEC_H SEP_2014
 
-//*******************************************************************
-//*                         CONTROL_VEC
-//* Struct to hold a control command for the motors
-//*******************************************************************
-struct Control_vec{
-    char label[15];
-    Direction::dir l_dir;
-    int l_pwm;
-    Direction::dir r_dir;
-    int r_pwm;
-};
+#include <clearinghouse.h>
+#include <messages/cmd_velocity.h>
 
 namespace Control {
     /*------Motor Control Constants-----------------*/
     //                                                  
-                                                      //left mtr                      //right mtr
-    const Control_vec forward =      {"forward",      Direction::fwd,   70,           Direction::fwd,   70};
-    const Control_vec forward_easy=  {"forward_easy", Direction::fwd,   70,           Direction::fwd,   70};
-    const Control_vec backward =     {"backward",     Direction::back,  60,           Direction::back,  60};
-    const Control_vec backward_twist={"back_twist",   Direction::back,  60,           Direction::back,  80};
-    const Control_vec ease_right =   {"ease_right",   Direction::fwd,  100,           Direction::fwd,   40};
-    const Control_vec ease_left =    {"ease_left",    Direction::fwd,   50,           Direction::fwd,  100};
-    const Control_vec swerve_right = {"swerve_right", Direction::fwd,  115,           Direction::back,  55};
-    const Control_vec swerve_left =  {"swerve_left",  Direction::back,  50,           Direction::fwd,  100};
-    const Control_vec twist_right =  {"twist_right",  Direction::fwd,  100,           Direction::back, 110};
+    const Cmd_velocity_msg forward       ("forwd", Direction::fwd, 100, Direction::fwd, 100);
+    const Cmd_velocity_msg forward_easy  ("f_eas", Direction::fwd,  70, Direction::fwd,  70);
+    const Cmd_velocity_msg back          ("back ", Direction::bck,  60, Direction::bck,  60);
+    const Cmd_velocity_msg back_twist_cw ("b__cw", Direction::bck,  20, Direction::bck, 100);
+    const Cmd_velocity_msg back_twist_ccw("b_ccw", Direction::bck, 125, Direction::bck,  10);
+    const Cmd_velocity_msg ease_right    ("ea_rt", Direction::fwd, 100, Direction::fwd,  40);
+    const Cmd_velocity_msg ease_left     ("ea_lt", Direction::fwd,  50, Direction::fwd, 100);
+    const Cmd_velocity_msg swerve_right  ("sw_rt", Direction::fwd, 115, Direction::bck,  55);
+    const Cmd_velocity_msg swerve_left   ("sw_lt", Direction::bck,  50, Direction::fwd, 100);
+    const Cmd_velocity_msg twist_right   ("tw_rt", Direction::fwd, 100, Direction::bck, 110);
 
-    const int number_of_controls = 9;
+    const int number_of_controls = 10;
 } //namespace control
 
 #endif
