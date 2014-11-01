@@ -7,6 +7,14 @@ Each variation is a different branch in the repo.  Complete builds
 are merged into the master branch and can be loaded via their .ino
 files in the folders included here.
 
+##Tags
+
+ - v1.0 - basic functionality with just the bump sensors and the
+helen keller controller.
+ - v1.1 - Stil manuevering with just the bump sensors, but this 
+version adds the light plant for a visual indication of what was 
+bumped.
+
 ##helen_keller:
 
 This version wanders around and reacts to bumping into things.  It
