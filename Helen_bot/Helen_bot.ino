@@ -78,7 +78,7 @@ void setup() {
     plant.begin();
     plant.print();
 	
-	//attach bumpers to the bumper_controller
+	//attach bumpers to the bumper plant
 	bumper_plant.attach(lt_bumper);
 	bumper_plant.attach(rt_bumper);
 	bumper_plant.begin();
@@ -106,7 +106,7 @@ void loop() {
     plant.run();
     light_plant.run();
 //   cmd_velocity_msg.print();
-//    cmd_led_msg.print();
+    cmd_led_msg.print();
 }
 
 

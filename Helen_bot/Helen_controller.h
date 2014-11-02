@@ -37,7 +37,6 @@ private:
 	Manuever_state::ms man_state;
   	//Maneuver time is the amount of time the bot reacts to a bump
 	int mt;
-	Time maneuver_start;
 	Time maneuver_finish;
 	const Cmd_velocity_msg* current_maneuver;
 

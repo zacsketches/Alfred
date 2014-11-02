@@ -13,12 +13,16 @@
 //*******************************************************************
 Whisker_controller::Whisker_controller()
     :Node("whisker_cont"),
+    bumper_sub(&bumper_msg, &ch, local_bumper_msg),
     scan_sub(&five_pt_scan_msg, &ch, local_scan_msg),
     pub(&cmd_velocity_msg, &ch, local_msg),
-    pub2(&cmd_led_msg, &ch, local_led_msg)
+    pub2(&cmd_led_msg, &ch, local_led_msg),
+    mt(2000),	//milliseconds
+    bp_state(Bumper_plant_state::clear),
+    bp_marker(Bumper_marker::none)
 {    
     //b_state = Bump_state::clear;
-    sensor_state = 0;
+    sensor_state = 0x00;
     dc_state = Danger_close_state::clear;
 }
 
@@ -55,6 +59,7 @@ void Whisker_controller::begin() {
 void Whisker_controller::run() {
  
         scan_sub.update();
+		bumper_sub.update();
         
 	    update_range(scan_data, local_scan_msg.p4);
 	    update_range(scan_data, local_scan_msg.p2);
@@ -62,7 +67,7 @@ void Whisker_controller::run() {
 	    update_range(scan_data, local_scan_msg.p1);
 	    update_range(scan_data, local_scan_msg.p3);
 
-//        b_state = calc_b_state();
+		bp_state = calc_bp_state(bp_marker);
         dc_state = calc_dc_state();
         sensor_state = calc_sensor_state();
         
@@ -75,16 +80,40 @@ void Whisker_controller::run() {
 //*******************************************************************
 //*                         HELPER FUNCTIONS
 //*******************************************************************
-/*
-Bump_state::bump_state Whisker_controller::calc_b_state() {
-    Bump_state::bump_state res = Bump_state::clear;
+
+Bumper_plant_state::bp Whisker_controller::calc_bp_state(Bumper_marker::marker& bm) {
+	Time now = millis();
+    Bumper_plant_state::bp res = Bumper_plant_state::clear;
     
-    if (rt_local_bumper_msg.pressed) res = Bump_state::rt_bump;
-    if (lt_local_bumper_msg.pressed) res = Bump_state::lt_bump;
-    
+	//If there is no active bump maneuver then poll the bumpers, 
+	//but if in the middle of maneuver then keep going until
+	//its finished.
+	if(bp_state  == Bumper_plant_state::clear) {
+		//if right bumped then mark it
+		if(local_bumper_msg.pressed_rt==Bump_state::pressed) {
+			res = Bumper_plant_state::maneuvering;
+			maneuver_finish = now + mt;
+			bm = Bumper_marker::rt;
+			}
+		
+		//if left bumped then mark it
+		if(local_bumper_msg.pressed_lt==Bump_state::pressed) {
+			res = Bumper_plant_state::maneuvering;
+			maneuver_finish = now + mt;
+			bm = Bumper_marker::lt;
+		}
+	} else {
+		//Alfred is already maneuvering in this case
+		if(now > maneuver_finish) {
+			res = Bumper_plant_state::clear;
+			bm = Bumper_marker::none;
+		} else {
+			res = Bumper_plant_state::maneuvering;
+		}
+	}
     return res;
 }
-*/
+
 
 void Whisker_controller::update_range(Vector<Scan_pt>& vec, const Scan_pt& pt) {
     for(int i = 0; i < vec.size(); ++i) {
@@ -141,7 +170,17 @@ const Cmd_velocity_msg* Whisker_controller::get_base_vector() {
 	//Default to easy forward
     const Cmd_velocity_msg* res;
     res = &Control::forward_easy;
-
+    
+  	//************************************************************************
+	//*                         BUMPS
+	//************************************************************************
+	//if the bp_state is maneuvering then figure out which direction and 
+	//set the right vector.
+	if(bp_state == Bumper_plant_state::maneuvering) {
+		if(bp_marker == Bumper_marker::rt) res = &Control::backtwist_CCW;
+		if(bp_marker == Bumper_marker::lt) res = &Control::backtwist_CW;
+		return res;
+	}
 	
 	//************************************************************************
 	//*                         DANGER CLOSE
