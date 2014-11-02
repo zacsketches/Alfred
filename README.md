@@ -15,6 +15,7 @@ helen keller controller.
 version adds the light plant for a visual indication of what was 
 bumped.
  - v2.0 - Wandering with the five pt scanner.
+ - v2.1 - Wandering with the five pt scanner and the light plant.
 
 ##Branches:
 
