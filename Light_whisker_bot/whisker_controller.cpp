@@ -18,7 +18,7 @@ Whisker_controller::Whisker_controller()
     pub2(&cmd_led_msg, &ch, local_led_msg)
 {    
     //b_state = Bump_state::clear;
-    sensor_state = 0x00;
+    sensor_state = 0;
     dc_state = Danger_close_state::clear;
 }
 
@@ -45,11 +45,11 @@ void Whisker_controller::begin() {
     	
     //set up the original copy of the scan_data vector;
     scan_data.reserve(5);
-    scan_data.push_back(Scan_pt(heading4, 0));
-    scan_data.push_back(Scan_pt(heading2, 0));
-    scan_data.push_back(Scan_pt(heading0, 0));
-    scan_data.push_back(Scan_pt(heading1, 0));
-    scan_data.push_back(Scan_pt(heading3, 0));
+    scan_data.push_back(Scan_pt(heading4, clear_distance));
+    scan_data.push_back(Scan_pt(heading2, clear_distance));
+    scan_data.push_back(Scan_pt(heading0, clear_distance));
+    scan_data.push_back(Scan_pt(heading1, clear_distance));
+    scan_data.push_back(Scan_pt(heading3, clear_distance));
 }
 
 void Whisker_controller::run() {

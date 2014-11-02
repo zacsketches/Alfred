@@ -81,6 +81,7 @@ private:
     static const int side_trip =        100; //cm
     static const int off_the_bow_trip =  80; //cm
     static const int dead_ahead_trip =   50; //cm
+	static const int clear_distance =   300; //cm
 
   	//Publisher/Subscribers and local copies
 	gw::Publisher<Cmd_velocity_msg> pub;
