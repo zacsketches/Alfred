@@ -1,11 +1,9 @@
 #Alfred
 
-Various implementations of my Glow-Worm framework on a dagu Rover5 
+My Glow Worm Arduino based robotics framework on a Dagu Rover5 
 platform.
 
-Each variation is a different branch in the repo.  Complete builds
-are merged into the master branch and can be loaded via their .ino
-files in the folders included here.
+The 
 
 ##Tags
 
@@ -17,7 +15,7 @@ bumped.
  - v2.0 - Wandering with the five pt scanner.
  - v2.1 - Wandering with the five pt scanner and the light plant.
 
-##Branches:
+##Development control systems
 
  - helen_keller - This version wanders around and reacts to bumping 
 into things.  It is equipped with a set of bumpers printed on our 
