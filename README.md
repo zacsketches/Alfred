@@ -8,36 +8,37 @@ integrates the ultrasonic sensor with the bump sensors and
 a light plant to provide some feedback on where the robot is
 sensing obstructions.
 
-Unfortunately, **AND THIS IS BIG**, I had to change the buffer size
+Unfortunately, **AND THIS IS BIG**, I had to change the buffer size in
 wire.h, twi.h, and hardwareSerial.h located in the Arduino libraries
 in order to create enough room for this code to load on Arduino Uno.
 
 If you aren't up for changing your libraries (using git to change 
-between original/altered version) you have two choices.  Load on the 
-Mega or Due or use one of the small sketches in the dev_sketches
+between original/altered version of the libraries) you have two choices.  
+Use the Mega or Due or use one of the small sketches in the dev_sketches
 folder.
 
 All these sketches use the tank tread style drive system that comes
 stock on the Dagu 5.  The control system in all these robots picks
-a control vector from the `control_vec.h` file.  To tune the
-robot's response tweak the values in these control vectors.
+a control vector from the `control_vec.h` file.  
+
+To tune the robot's response tweak the values in these control vectors.
 
 Most sketch folders also include a `XXX_controller.h` file that
 implements the decision logic for choosing a control vector based
 on the results of the sensor input, whether that is the ultrasonic
-sensor or the bump sensors. 
+sensor or the bump sensors or all of them.
 
 ##Development control systems
 
 These sketches are located in the dev_sketches folder
 
  - Helen_bot - This version wanders around and reacts to bumping 
-into things (Not that politically correct of a name, but hey..she
-was freaked out in her later years and became an ardent support of 
-Stalin.  She had it coming).  The Helen_bot is equipped with a set 
-of bumpers printed on our 3D printer.  Files for the bumpers are 
-in the prints folder.  Each bumper is wired with two momentary 
-pushbutton switches which ground the input pin and allows the 
+into things (Not a very politically correct name, but hey..she
+was out in her later years even supporting Eugenics for crying
+out loud (<a href="http://disabilityrightsgalaxy.com/the-untold-story-of-helen-keller/">ref</a>) so she had it coming).  
+The Helen_bot is equipped with a set of bumpers printed on our 3D printer.
+Files for the bumpers are in the prints folder.  Each bumper is wired with 
+two momentary pushbutton switches which ground the input pin and allows the 
 robot to react to the bump.  Each time a pin is grounded (because a 
 bumper ran into something) the robot will back away from the
 obstruction for a proscribed reaction time.  This reaction time can 
