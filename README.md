@@ -8,7 +8,7 @@ integrates the ultrasonic sensor with the bump sensors and
 a light plant to provide some feedback on where the robot is
 sensing obstructions.
 
-Unfortunately **AND THIS IS BIG** I had to change the buffer size
+Unfortunately, **AND THIS IS BIG**, I had to change the buffer size
 wire.h, twi.h, and hardwareSerial.h located in the Arduino libraries
 in order to create enough room for this code to load on Arduino Uno.
 
