@@ -34,7 +34,7 @@ These sketches are located in the dev_sketches folder
 
  - Helen_bot - This version wanders around and reacts to bumping 
 into things (Not a very politically correct name, but hey..she
-was out in her later years even supporting Eugenics for crying
+freaked out in her later years even supporting Eugenics for crying
 out loud (<a href="http://disabilityrightsgalaxy.com/the-untold-story-of-helen-keller/">ref</a>) so she had it coming).  
 The Helen_bot is equipped with a set of bumpers printed on our 3D printer.
 Files for the bumpers are in the prints folder.  Each bumper is wired with 
